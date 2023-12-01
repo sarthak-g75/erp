@@ -30,8 +30,7 @@ export const adminLogin = async (req, res) => {
         email: existingAdmin.email,
         id: existingAdmin._id,
       },
-      'sEcReT',
-      { expiresIn: '1h' }
+      'sEcReT'
     )
 
     res.status(200).json({ result: existingAdmin, token: token })
