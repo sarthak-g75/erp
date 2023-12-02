@@ -1,5 +1,10 @@
 import express from 'express'
+import multer from 'multer'
+import path from 'path'
+import bodyParser from 'body-parser'
+
 import auth from '../middleware/auth.js'
+
 import {
   adminLogin,
   updateAdmin,
@@ -26,8 +31,25 @@ import {
   createNotice,
   getNotice,
   newAdmin,
+  addAllStudents,
 } from '../controller/adminController.js'
 const router = express.Router()
+
+router.use(bodyParser.urlencoded({ extended: true }))
+router.use(express.static(path.resolve(process.cwd(), 'public')))
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.resolve(process.cwd(), 'public/uploads'))
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  },
+})
+
+const upload = multer({ storage: storage })
+
+router.post('/addAllStudents', upload.single('file'), addAllStudents)
 
 router.post('/login', adminLogin)
 router.post('/newadmin', newAdmin)

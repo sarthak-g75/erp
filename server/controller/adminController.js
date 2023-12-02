@@ -6,7 +6,7 @@ import Subject from '../models/subject.js'
 import Notice from '../models/notice.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-
+import csvtojson from 'csvtojson'
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body
   const errors = { usernameError: String, passwordError: String }
@@ -667,5 +667,63 @@ export const getAllSubject = async (req, res) => {
     res.status(200).json(subjects)
   } catch (error) {
     console.log('Backend Error', error)
+  }
+}
+
+export const addAllStudents = async (req, res) => {
+  try {
+    var userData = []
+    csvtojson()
+      .fromFile(req.file.path)
+      .then(async (response) => {
+        for (var i = 0; i < response.length; i++) {
+          let hashedPassword
+          const newDob = response[i].dob.split('-').join('-')
+
+          hashedPassword = await bcrypt.hash(newDob, 10)
+
+          const existingDepartment = await Department.findOne({
+            department: response[i].department,
+          })
+          let departmentHelper = existingDepartment.departmentCode
+
+          const students = await Student.find({
+            department: response[i].department,
+          })
+          let helper
+          if (students.length < 10) {
+            helper = '00' + students.length.toString()
+          } else if (students.length < 100 && students.length > 9) {
+            helper = '0' + students.length.toString()
+          } else {
+            helper = students.length.toString()
+          }
+          var date = new Date()
+          var components = ['STU', date.getFullYear(), departmentHelper, helper]
+
+          var username = components.join('')
+
+          userData.push({
+            name: response[i].name,
+            email: response[i].email,
+            year: response[i].year,
+            password: hashedPassword,
+            username,
+            gender: response[i].gender,
+            fatherName: response[i].fatherName,
+            motherName: response[i].motherName,
+            department: response[i].department,
+            batch: response[i].batch,
+            section: response[i].section,
+            contactNumber: response[i].contactNumber,
+            fatherContactNumber: response[i].fatherContactNumber,
+            dob: response[i].dob,
+          })
+        }
+        await Student.insertMany(userData)
+      })
+    res.send({ status: 200, success: true, msg: 'CSV imported' })
+  } catch (error) {
+    res.send({ status: 400, success: false, msg: message.error })
   }
 }

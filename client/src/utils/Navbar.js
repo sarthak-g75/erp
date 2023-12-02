@@ -16,8 +16,8 @@ const Navbar = () => {
         className='flex items-center justify-center gap-2'
       >
         <img
-          src='logo.png'
-          className='w-12'
+          src='logo.jpg'
+          className='w-12 mix-blend-multiply'
           alt='logo'
         />
         <span className='text-2xl font-bold'>CampusTrack</span>
