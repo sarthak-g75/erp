@@ -4,6 +4,7 @@ import AddAdmin from './components/admin/addAdmin/AddAdmin'
 import AddDepartment from './components/admin/addDepartment/AddDepartment'
 import AddFaculty from './components/admin/addFaculty/AddFaculty'
 import AddStudent from './components/admin/addStudent/AddStudent'
+import AddStudents from './components/admin/addStudents/AddStudents'
 import AddSubject from './components/admin/addSubject/AddSubject'
 import AdminHome from './components/admin/AdminHome'
 
@@ -113,6 +114,7 @@ const App = () => {
           path='/admin/deletestudent'
           element={<DeleteStudent />}
         />
+
         <Route
           path='/admin/deletesubject'
           element={<DeleteSubject />}
@@ -124,6 +126,10 @@ const App = () => {
         <Route
           path='/admin/addstudent'
           element={<AddStudent />}
+        />
+        <Route
+          path='/admin/addStudents'
+          element={<AddStudents />}
         />
         <Route
           path='/admin/addsubject'

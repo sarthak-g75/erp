@@ -153,9 +153,18 @@ const Sidebar = () => {
             }
           >
             <BoyIcon className='' />
-            <h1 className='font-normal'>Our Students</h1>
+            <h1 className='font-normal'>Our Student</h1>
           </NavLink>
 
+          <NavLink
+            to={'/admin/addStudents'}
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <AddIcon className='' />
+            <h1 className='font-normal'>Add Students in Bulk</h1>
+          </NavLink>
           <NavLink
             to='/admin/addstudent'
             className={({ isActive }) =>
