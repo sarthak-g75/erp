@@ -676,7 +676,7 @@ export const addAllStudents = async (req, res) => {
     const response = await csvtojson().fromFile(req.file.path)
 
     const errors = { emailError: String }
-
+    var subjectData = []
     let newHelper
     for (var i = 0; i < response.length; i++) {
       const existingStudent = await Student.find({
@@ -697,6 +697,16 @@ export const addAllStudents = async (req, res) => {
       let departmentHelper = existingDepartment.departmentCode
 
       if (i < 1) {
+        const subjects = await Subject.find({
+          department: response[i].department,
+          year: response[i].year,
+        })
+        if (subjects.length !== 0) {
+          for (var i = 0; i < subjects.length; i++) {
+            subjectData.push(subjects[i]._id)
+          }
+        }
+
         const students = await Student.find({
           department: response[i].department,
         })
@@ -705,7 +715,7 @@ export const addAllStudents = async (req, res) => {
       }
 
       let helper
-      if (newHelper < 10 && newHelper > 0) {
+      if (newHelper < 10) {
         helper = '00' + newHelper.toString()
       } else if (newHelper < 100 && newHelper > 9) {
         helper = '0' + newHelper.toString()
@@ -732,9 +742,11 @@ export const addAllStudents = async (req, res) => {
         contactNumber: response[i].contactNumber,
         fatherContactNumber: response[i].fatherContactNumber,
         dob: response[i].dob,
+        subjects: subjectData,
       })
       newHelper++
     }
+
     await Student.insertMany(userData)
 
     res.send({ status: 200, success: true, msg: 'CSV imported' })
