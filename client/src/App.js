@@ -14,6 +14,7 @@ import GetSubject from './components/admin/getSubject/GetSubject'
 import AdminProfile from './components/admin/profile/Profile'
 import AdminFirstTimePassword from './components/admin/profile/update/firstTimePassword/FirstTimePassword'
 import AdminPassword from './components/admin/profile/update/password/Password'
+import CreateTimeTable from './components/admin/createTimeTable/CreateTimeTable'
 
 import AdminUpdate from './components/admin/profile/update/Update'
 import CreateTest from './components/faculty/createTest/CreateTest'
@@ -43,7 +44,9 @@ import DeleteFaculty from './components/admin/deleteFaculty/DeleteFaculty'
 import DeleteStudent from './components/admin/deleteStudent/DeleteStudent'
 import DeleteSubject from './components/admin/deleteSubject/DeleteSubject'
 import CreateNotice from './components/admin/createNotice/CreateNotice'
+
 import Navbar from './utils/Navbar'
+import GetTimeTable from './components/admin/getTimeTable/GetTimeTable'
 
 const App = () => {
   return (
@@ -58,6 +61,10 @@ const App = () => {
 
         {/* Admin  */}
 
+        <Route
+          path='/admin/getTimeTable'
+          element={<GetTimeTable />}
+        />
         <Route
           path='/login/adminlogin'
           element={<AdminLogin />}
@@ -85,6 +92,10 @@ const App = () => {
         <Route
           path='/admin/createnotice'
           element={<CreateNotice />}
+        />
+        <Route
+          path='/admin/createTimeTable'
+          element={<CreateTimeTable />}
         />
         <Route
           path='/admin/addadmin'

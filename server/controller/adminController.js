@@ -265,9 +265,11 @@ export const createTimeTable = async (req, res) => {
     // Save the new timetable to the database
     await newTimeTable.save()
 
-    res
-      .status(200)
-      .json({ success: true, message: 'Time Table created successfully' })
+    res.status(200).json({
+      success: true,
+      message: 'Notice created successfully',
+      response: newTimeTable,
+    })
   } catch (error) {
     res.send({ status: 400, success: false, msg: error.message })
   }
@@ -305,7 +307,7 @@ export const getTimeTable = async (req, res) => {
       return res.status(404).json({ message: 'Timetable not found' })
     }
 
-    res.status(200).json({ timetable })
+    res.status(200).json({ result: timetable })
   } catch (error) {
     console.error('Error fetching timetable:', error)
     res.status(500).json({ error: 'Internal Server Error' })

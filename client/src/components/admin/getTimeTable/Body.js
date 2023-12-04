@@ -1,7 +1,9 @@
+// YourReactComponent.js
+
 import React, { useEffect, useState } from 'react'
-import MenuBookIcon from '@mui/icons-material/MenuBook'
+import EngineeringIcon from '@mui/icons-material/Engineering'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSubject } from '../../../redux/actions/adminActions'
+import { getTimeTable } from '../../../redux/actions/adminActions'
 import { MenuItem, Select } from '@mui/material'
 import Spinner from '../../../utils/Spinner'
 import { SET_ERRORS } from '../../../redux/actionTypes'
@@ -16,7 +18,7 @@ const Body = () => {
   const store = useSelector((state) => state)
   const [value, setValue] = useState({
     department: '',
-    year: '',
+    year: 1,
   })
   const [search, setSearch] = useState(false)
 
@@ -32,13 +34,15 @@ const Body = () => {
     setSearch(true)
     setLoading(true)
     setError({})
-    dispatch(getSubject(value))
+    dispatch(getTimeTable(value))
   }
-  const subjects = useSelector((state) => state.admin.subjects.result)
+
+  const timetable = useSelector((state) => state.admin.timeTables.result)
 
   useEffect(() => {
-    if (subjects?.length !== 0) setLoading(false)
-  }, [subjects])
+    if (timetable?.length !== 0) setLoading(false)
+    console.log(timetable)
+  }, [timetable])
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} })
@@ -48,8 +52,8 @@ const Body = () => {
     <div className='flex-[0.8] mt-3'>
       <div className='space-y-5'>
         <div className='flex items-center space-x-2 text-gray-400'>
-          <MenuBookIcon />
-          <h1>All Subjects</h1>
+          <EngineeringIcon />
+          <h1>View Timetable</h1>
         </div>
         <div className=' mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]'>
           <form
@@ -87,10 +91,10 @@ const Body = () => {
               onChange={(e) => setValue({ ...value, year: e.target.value })}
             >
               <MenuItem value=''>None</MenuItem>
-              <MenuItem value='1'>1</MenuItem>
-              <MenuItem value='2'>2</MenuItem>
-              <MenuItem value='3'>3</MenuItem>
-              <MenuItem value='4'>4</MenuItem>
+              <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
             </Select>
             <button
               className={`${classes.adminFormSubmitButton} w-56`}
@@ -104,65 +108,25 @@ const Body = () => {
             <div className={classes.loadingAndError}>
               {loading && (
                 <Spinner
-                  message='Loading'
+                  message='Loading Timetable'
                   height={50}
                   width={150}
                   color='#111111'
                   messageColor='blue'
                 />
               )}
-              {(error.noSubjectError || error.backendError) && (
+              {(error.noTimetableError || error.backendError) && (
                 <p className='text-2xl font-bold text-red-500'>
-                  {error.noSubjectError || error.backendError}
+                  {error.noTimetableError || error.backendError}
                 </p>
               )}
             </div>
             {search &&
               !loading &&
               Object.keys(error).length === 0 &&
-              subjects?.length !== 0 && (
+              timetable?.length !== 0 && (
                 <div className={classes.adminData}>
-                  <div className='grid grid-cols-7'>
-                    <h1 className={`${classes.adminDataHeading} col-span-1`}>
-                      Sr no.
-                    </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-2`}>
-                      Subject Code
-                    </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-3`}>
-                      Subject Name
-                    </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-1`}>
-                      Total Lectures
-                    </h1>
-                  </div>
-                  {subjects?.map((sub, idx) => (
-                    <div
-                      key={idx}
-                      className={`${classes.adminDataBody} grid-cols-7`}
-                    >
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}
-                      >
-                        {idx + 1}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}
-                      >
-                        {sub.subjectCode}
-                      </h1>
-                      <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}
-                      >
-                        {sub.subjectName}
-                      </h1>
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}
-                      >
-                        {sub.totalLectures}
-                      </h1>
-                    </div>
-                  ))}
+                  {/* Render your timetable here based on the 'timetable' state */}
                 </div>
               )}
           </div>

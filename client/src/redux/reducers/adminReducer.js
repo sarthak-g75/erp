@@ -25,6 +25,8 @@ import {
   DELETE_SUBJECT,
   CREATE_NOTICE,
   GET_NOTICE,
+  CREATE_TIME_TABLE,
+  GET_TIME_TABLE,
 } from '../actionTypes'
 
 const initialState = {
@@ -46,12 +48,14 @@ const initialState = {
   subjects: [],
   admins: [],
   notices: [],
+  timeTables: [],
   adminDeleted: false,
   departmentDeleted: false,
   facultyDeleted: false,
   studentDeleted: false,
   subjectDeleted: false,
   noticeCreated: false,
+  timeTableCreated: false,
 }
 
 const adminReducer = (state = initialState, action) => {
@@ -126,6 +130,16 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         notices: action.payload,
+      }
+    case CREATE_TIME_TABLE:
+      return {
+        ...state,
+        timeTableCreated: action.payload,
+      }
+    case GET_TIME_TABLE:
+      return {
+        ...state,
+        timeTables: action.payload,
       }
     case GET_ADMIN:
       return {

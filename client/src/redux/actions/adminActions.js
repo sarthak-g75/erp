@@ -23,7 +23,9 @@ import {
   DELETE_STUDENT,
   DELETE_SUBJECT,
   CREATE_NOTICE,
+  CREATE_TIME_TABLE,
   GET_NOTICE,
+  GET_TIME_TABLE,
 } from '../actionTypes'
 import * as api from '../api'
 
@@ -260,6 +262,25 @@ export const getNotice = (formData) => async (dispatch) => {
   try {
     const { data } = await api.getNotice(formData)
     dispatch({ type: GET_NOTICE, payload: data })
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data })
+  }
+}
+
+export const createTimeTable = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.createTimeTable(formData)
+    alert('Notice Created Successfully')
+    dispatch({ type: CREATE_TIME_TABLE, payload: true })
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data })
+  }
+}
+
+export const getTimeTable = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.getTimeTable(formData)
+    dispatch({ type: GET_TIME_TABLE, payload: data })
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data })
   }

@@ -66,6 +66,12 @@ export const addStudent = (student) =>
 export const getStudent = (student) =>
   API.post('/api/admin/getstudent', student)
 
+export const getTimeTable = (timeTable) =>
+  API.get('/api/admin/getTimeTable', timeTable)
+
+export const createTimeTable = (formData) =>
+  API.post('/api/admin/createTimeTable', formData)
+
 export const addAllStudents = (file) =>
   API.post('/api/admin/addAllStudents', file, {
     headers: {

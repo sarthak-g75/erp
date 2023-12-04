@@ -77,6 +77,26 @@ const Sidebar = () => {
         </div>
         <div className=''>
           <NavLink
+            to='/admin/createTimeTable'
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <AddIcon className='' />
+            <h1 className='font-normal'>Create Time Table</h1>
+          </NavLink>
+          <NavLink
+            to='/admin/getTimeTable'
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <AddIcon className='' />
+            <h1 className='font-normal'>Get Time Table</h1>
+          </NavLink>
+        </div>
+        <div className=''>
+          <NavLink
             to='/admin/addadmin'
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
