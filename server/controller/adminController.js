@@ -1,5 +1,6 @@
 import Admin from '../models/admin.js'
 import Department from '../models/department.js'
+import TimeTable from '../models/timeTable.js'
 import Faculty from '../models/faculty.js'
 import Student from '../models/student.js'
 import Subject from '../models/subject.js'
@@ -7,6 +8,8 @@ import Notice from '../models/notice.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import csvtojson from 'csvtojson'
+
+// Admin Login
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body
   const errors = { usernameError: String, passwordError: String }
@@ -39,6 +42,7 @@ export const adminLogin = async (req, res) => {
   }
 }
 
+// update pass
 export const updatedPassword = async (req, res) => {
   try {
     const { newPassword, confirmPassword, email } = req.body
@@ -70,6 +74,8 @@ export const updatedPassword = async (req, res) => {
     res.status(500).json(errors)
   }
 }
+
+// update admin
 export const updateAdmin = async (req, res) => {
   try {
     const { name, dob, department, contactNumber, avatar, email } = req.body
@@ -102,6 +108,7 @@ export const updateAdmin = async (req, res) => {
   }
 }
 
+// new Admin
 export const newAdmin = async (req, res) => {
   try {
     const { name, joiningYear, email, department, dob, contactNumber } =
@@ -145,6 +152,7 @@ export const newAdmin = async (req, res) => {
   }
 }
 
+// add Admin
 export const addAdmin = async (req, res) => {
   try {
     const { name, dob, department, contactNumber, avatar, email, joiningYear } =
@@ -201,6 +209,71 @@ export const addAdmin = async (req, res) => {
   }
 }
 
+// create TimeTable
+export const createTimeTable = async (req, res) => {
+  try {
+    const { department, year } = req.body
+    const errors = { timeTableError: String }
+    const existingTimeTable = await TimeTable.findOne({
+      department,
+      year,
+    })
+    const subjects = await Subject.find({ department, year })
+
+    if (existingTimeTable) {
+      errors.timeTableError = 'Time Table already created'
+      return res.status(400).json(errors)
+    }
+
+    const timeSlot = ['9-10', '10-11', '11-12', '12-1', '1-2', '2-3', '3-4']
+    const days = [0, 1, 2, 3, 4]
+
+    const newTimeTable = new TimeTable({
+      year,
+      department,
+      entries: [],
+    })
+
+    for (let i = 0; i < days.length; i++) {
+      const tempSubjects = [...subjects] // Create a copy of subjects array
+
+      const dayEntries = []
+
+      for (let j = 0; j < timeSlot.length; j++) {
+        if (tempSubjects.length === 0) {
+          // If all subjects are used for the day, break the inner loop
+          break
+        }
+
+        // Choose a random subject from tempSubjects
+        const randomIndex = Math.floor(Math.random() * tempSubjects.length)
+        const randomSubject = tempSubjects.splice(randomIndex, 1)[0]
+
+        // Create an entry for the day
+        const entry = {
+          timeSlot: timeSlot[j],
+          subject: randomSubject.subjectName, // Assuming each subject has a name property
+        }
+
+        dayEntries.push(entry)
+      }
+
+      // Add dayEntries to the new timetable
+      newTimeTable.entries.push({ day: days[i], entry: dayEntries })
+    }
+
+    // Save the new timetable to the database
+    await newTimeTable.save()
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Time Table created successfully' })
+  } catch (error) {
+    res.send({ status: 400, success: false, msg: error.message })
+  }
+}
+
+// create Notice
 export const createNotice = async (req, res) => {
   try {
     const { from, content, topic, date, noticeFor } = req.body
@@ -231,6 +304,7 @@ export const createNotice = async (req, res) => {
   }
 }
 
+// add Department
 export const addDepartment = async (req, res) => {
   try {
     const errors = { departmentError: String }
@@ -267,6 +341,7 @@ export const addDepartment = async (req, res) => {
   }
 }
 
+// add Faculty
 export const addFaculty = async (req, res) => {
   try {
     const {
@@ -335,6 +410,7 @@ export const addFaculty = async (req, res) => {
   }
 }
 
+// get Faculty
 export const getFaculty = async (req, res) => {
   try {
     const { department } = req.body
@@ -351,6 +427,8 @@ export const getFaculty = async (req, res) => {
     res.status(500).json(errors)
   }
 }
+
+// get Notice
 export const getNotice = async (req, res) => {
   try {
     const errors = { noNoticeError: String }
@@ -367,6 +445,7 @@ export const getNotice = async (req, res) => {
   }
 }
 
+// add Subject
 export const addSubject = async (req, res) => {
   try {
     const { totalLectures, department, subjectCode, subjectName, year } =
@@ -406,6 +485,7 @@ export const addSubject = async (req, res) => {
   }
 }
 
+// get Subject
 export const getSubject = async (req, res) => {
   try {
     const { department, year } = req.body
@@ -426,6 +506,7 @@ export const getSubject = async (req, res) => {
   }
 }
 
+// get Admin
 export const getAdmin = async (req, res) => {
   try {
     const { department } = req.body
@@ -445,6 +526,7 @@ export const getAdmin = async (req, res) => {
   }
 }
 
+// delete Admin
 export const deleteAdmin = async (req, res) => {
   try {
     const admins = req.body
@@ -461,6 +543,8 @@ export const deleteAdmin = async (req, res) => {
     res.status(500).json(errors)
   }
 }
+
+// delete Faculty
 export const deleteFaculty = async (req, res) => {
   try {
     const faculties = req.body
@@ -477,6 +561,8 @@ export const deleteFaculty = async (req, res) => {
     res.status(500).json(errors)
   }
 }
+
+// delete Student
 export const deleteStudent = async (req, res) => {
   try {
     const students = req.body
@@ -493,6 +579,8 @@ export const deleteStudent = async (req, res) => {
     res.status(500).json(errors)
   }
 }
+
+// delete Subject
 export const deleteSubject = async (req, res) => {
   try {
     const subjects = req.body
@@ -510,6 +598,7 @@ export const deleteSubject = async (req, res) => {
   }
 }
 
+// delete Department
 export const deleteDepartment = async (req, res) => {
   try {
     const { department } = req.body
@@ -524,6 +613,7 @@ export const deleteDepartment = async (req, res) => {
   }
 }
 
+// add Student
 export const addStudent = async (req, res) => {
   try {
     const {
@@ -609,6 +699,7 @@ export const addStudent = async (req, res) => {
   }
 }
 
+// get Student
 export const getStudent = async (req, res) => {
   try {
     const { department, year, section } = req.body
@@ -627,6 +718,8 @@ export const getStudent = async (req, res) => {
     res.status(500).json(errors)
   }
 }
+
+// get All Students
 export const getAllStudent = async (req, res) => {
   try {
     const students = await Student.find()
@@ -636,6 +729,7 @@ export const getAllStudent = async (req, res) => {
   }
 }
 
+// get All Faculty
 export const getAllFaculty = async (req, res) => {
   try {
     const faculties = await Faculty.find()
@@ -645,6 +739,7 @@ export const getAllFaculty = async (req, res) => {
   }
 }
 
+// get All Admin
 export const getAllAdmin = async (req, res) => {
   try {
     const admins = await Admin.find()
@@ -653,6 +748,8 @@ export const getAllAdmin = async (req, res) => {
     console.log('Backend Error', error)
   }
 }
+
+// get All Department
 export const getAllDepartment = async (req, res) => {
   try {
     const departments = await Department.find()
@@ -661,6 +758,8 @@ export const getAllDepartment = async (req, res) => {
     console.log('Backend Error', error)
   }
 }
+
+// get All Subject
 export const getAllSubject = async (req, res) => {
   try {
     const subjects = await Subject.find()
@@ -670,6 +769,7 @@ export const getAllSubject = async (req, res) => {
   }
 }
 
+// add All Students
 export const addAllStudents = async (req, res) => {
   try {
     var userData = []

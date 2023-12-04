@@ -31,6 +31,7 @@ import {
   createNotice,
   getNotice,
   newAdmin,
+  createTimeTable,
   addAllStudents,
 } from '../controller/adminController.js'
 const router = express.Router()
@@ -50,6 +51,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/addAllStudents', upload.single('file'), addAllStudents)
+router.post('/createTimeTable', createTimeTable)
 
 router.post('/login', adminLogin)
 router.post('/newadmin', newAdmin)
