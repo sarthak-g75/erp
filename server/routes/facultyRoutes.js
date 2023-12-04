@@ -13,7 +13,7 @@ import { getTimeTable } from '../controller/adminController.js'
 import auth from '../middleware/auth.js'
 
 const router = express.Router()
-router.get('./getTimeTable', getTimeTable)
+router.get('/getTimeTable', getTimeTable)
 
 router.post('/login', facultyLogin)
 router.post('/updatepassword', auth, updatedPassword)
