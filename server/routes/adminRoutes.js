@@ -32,6 +32,8 @@ import {
   getNotice,
   newAdmin,
   createTimeTable,
+  deleteTimeTable,
+  getTimeTable,
   addAllStudents,
 } from '../controller/adminController.js'
 const router = express.Router()
@@ -52,6 +54,8 @@ const upload = multer({ storage: storage })
 
 router.post('/addAllStudents', upload.single('file'), addAllStudents)
 router.post('/createTimeTable', createTimeTable)
+router.delete('/deleteTimeTable', deleteTimeTable)
+router.get('/getTimeTable', getTimeTable)
 
 router.post('/login', adminLogin)
 router.post('/newadmin', newAdmin)

@@ -1,19 +1,22 @@
-import express from "express";
+import express from 'express'
 import {
   studentLogin,
   updatedPassword,
   updateStudent,
   testResult,
   attendance,
-} from "../controller/studentController.js";
-import auth from "../middleware/auth.js";
+} from '../controller/studentController.js'
 
-const router = express.Router();
+import { getTimeTable } from '../controller/adminController.js'
+import auth from '../middleware/auth.js'
 
-router.post("/login", studentLogin);
-router.post("/updatepassword", auth, updatedPassword);
-router.post("/updateprofile", auth, updateStudent);
-router.post("/testresult", auth, testResult);
-router.post("/attendance", auth, attendance);
+const router = express.Router()
+router.get('./getTimeTable', getTimeTable)
 
-export default router;
+router.post('/login', studentLogin)
+router.post('/updatepassword', auth, updatedPassword)
+router.post('/updateprofile', auth, updateStudent)
+router.post('/testresult', auth, testResult)
+router.post('/attendance', auth, attendance)
+
+export default router

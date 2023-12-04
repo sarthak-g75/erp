@@ -273,6 +273,45 @@ export const createTimeTable = async (req, res) => {
   }
 }
 
+// delete TimeTable
+export const deleteTimeTable = async (req, res) => {
+  try {
+    const { department, year } = req.body
+
+    // Assuming department and year are properties in the timetable schema
+    const timetable = await TimeTable.findOneAndDelete({ department, year })
+
+    if (!timetable) {
+      return res.status(404).json({ message: 'Timetable not found' })
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Timetable deleted successfully' })
+  } catch (error) {
+    console.error('Error deleting timetable:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+}
+
+// get Time Table
+export const getTimeTable = async (req, res) => {
+  const { department, year } = req.body
+
+  try {
+    const timetable = await TimeTable.findOne({ department, year })
+
+    if (!timetable) {
+      return res.status(404).json({ message: 'Timetable not found' })
+    }
+
+    res.status(200).json({ timetable })
+  } catch (error) {
+    console.error('Error fetching timetable:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+}
+
 // create Notice
 export const createNotice = async (req, res) => {
   try {

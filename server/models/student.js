@@ -1,9 +1,13 @@
-import mongoose from "mongoose";
-const { Schema } = mongoose;
+import mongoose from 'mongoose'
+const { Schema } = mongoose
 const studentSchema = new Schema({
   name: {
     type: String,
     required: true,
+  },
+  role: {
+    type: String,
+    default: 'student',
   },
   email: {
     type: String,
@@ -24,7 +28,7 @@ const studentSchema = new Schema({
   subjects: [
     {
       type: Schema.Types.ObjectId,
-      ref: "subject",
+      ref: 'subject',
     },
   ],
   username: {
@@ -64,6 +68,6 @@ const studentSchema = new Schema({
     type: Boolean,
     default: false,
   },
-});
+})
 
-export default mongoose.model("student", studentSchema);
+export default mongoose.model('student', studentSchema)
