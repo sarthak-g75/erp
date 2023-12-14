@@ -299,7 +299,7 @@ export const deleteTimeTable = async (req, res) => {
 // get Time Table
 export const getTimeTable = async (req, res) => {
   const { department, year } = req.body
-
+  // console.log(department, year)
   try {
     const timetable = await TimeTable.findOne({ department, year })
 
@@ -314,6 +314,15 @@ export const getTimeTable = async (req, res) => {
   }
 }
 
+// get All Time Table
+export const getAllTimeTable = async (req, res) => {
+  try {
+    const timeTables = await TimeTable.find()
+    res.status(200).json(timeTables)
+  } catch (error) {
+    console.log('Backend Error', error)
+  }
+}
 // create Notice
 export const createNotice = async (req, res) => {
   try {

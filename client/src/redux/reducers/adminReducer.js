@@ -36,6 +36,7 @@ const initialState = {
   adminAdded: false,
   departmentAdded: false,
   facultyAdded: false,
+  timeTableCreated: false,
   studentAdded: false,
   subjectAdded: false,
   allFaculty: [],
@@ -55,7 +56,6 @@ const initialState = {
   studentDeleted: false,
   subjectDeleted: false,
   noticeCreated: false,
-  timeTableCreated: false,
 }
 
 const adminReducer = (state = initialState, action) => {

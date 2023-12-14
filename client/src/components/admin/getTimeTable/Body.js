@@ -13,15 +13,14 @@ const Body = () => {
   const dispatch = useDispatch()
   const [error, setError] = useState({})
   const departments = useSelector((state) => state.admin.allDepartment)
-
   const [loading, setLoading] = useState(false)
   const store = useSelector((state) => state)
+  const [search, setSearch] = useState(false)
   const [value, setValue] = useState({
     department: '',
-    year: 1,
+    year: '',
   })
-  const [search, setSearch] = useState(false)
-
+  // console.log(departments)
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors)
@@ -30,18 +29,24 @@ const Body = () => {
   }, [store.errors])
 
   const handleSubmit = (e) => {
+    // test(value)
     e.preventDefault()
     setSearch(true)
     setLoading(true)
     setError({})
+    // console.log(value)
     dispatch(getTimeTable(value))
   }
 
   const timetable = useSelector((state) => state.admin.timeTables.result)
+  // console.log(timetable)
+  // console.log(timetable)
 
   useEffect(() => {
-    if (timetable?.length !== 0) setLoading(false)
-    console.log(timetable)
+    if (timetable?.length !== 0) {
+      setLoading(false)
+    }
+    // console.log(timetable)
   }, [timetable])
 
   useEffect(() => {
@@ -91,10 +96,10 @@ const Body = () => {
               onChange={(e) => setValue({ ...value, year: e.target.value })}
             >
               <MenuItem value=''>None</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={'1'}>1</MenuItem>
+              <MenuItem value={'2'}>2</MenuItem>
+              <MenuItem value={'3'}>3</MenuItem>
+              <MenuItem value={'4'}>4</MenuItem>
             </Select>
             <button
               className={`${classes.adminFormSubmitButton} w-56`}

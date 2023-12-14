@@ -250,6 +250,7 @@ export const addAllStudents = (fileFormData) => async (dispatch) => {
 }
 
 export const getStudent = (formData) => async (dispatch) => {
+  // console.log(formData)
   try {
     const { data } = await api.getStudent(formData)
     dispatch({ type: GET_STUDENT, payload: data })
@@ -278,10 +279,15 @@ export const createTimeTable = (formData) => async (dispatch) => {
 }
 
 export const getTimeTable = (formData) => async (dispatch) => {
+  // console.log(formData)
+
   try {
-    const { data } = await api.getTimeTable(formData)
-    dispatch({ type: GET_TIME_TABLE, payload: data })
+    console.log(formData)
+    // console.log('data')
+    const data = await api.getTimeTable(formData)
+    dispatch({ type: GET_TIME_TABLE, payload: data.result })
   } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data })
+    // console.error('dat')
+    console.error(error.message)
   }
 }

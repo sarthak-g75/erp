@@ -66,8 +66,8 @@ export const addStudent = (student) =>
 export const getStudent = (student) =>
   API.post('/api/admin/getstudent', student)
 
-export const getTimeTable = (timeTable) =>
-  API.get('/api/admin/getTimeTable', timeTable)
+export const getTimeTable = (formData) =>
+  API.get('/api/admin/getTimeTable', formData)
 
 export const createTimeTable = (formData) =>
   API.post('/api/admin/createTimeTable', formData)
