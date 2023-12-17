@@ -282,12 +282,11 @@ export const getTimeTable = (formData) => async (dispatch) => {
   // console.log(formData)
 
   try {
-    console.log(formData)
-    // console.log('data')
-    const data = await api.getTimeTable(formData)
-    dispatch({ type: GET_TIME_TABLE, payload: data.result })
+    const { department, year } = formData
+    const data = await api.getTimeTable({ department, year })
+    // console.log(data.data.result)
+    dispatch({ type: GET_TIME_TABLE, payload: data.data.result })
   } catch (error) {
-    // console.error('dat')
     console.error(error.message)
   }
 }

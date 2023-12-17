@@ -20,6 +20,50 @@ const Body = () => {
     department: '',
     year: '',
   })
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+  const renderEntries = (entries) => {
+    return entries.map((entry) => (
+      <td
+        key={entry._id}
+        className='p-2 border'
+      >
+        <p className='font-bold'>{entry.subject}</p>
+      </td>
+    ))
+  }
+
+  // Function to render the timetable
+  const renderTimetable = () => {
+    return (
+      <table className='w-full border border-collapse table-auto'>
+        <thead>
+          <tr>
+            <th className='p-2 border'></th>
+            <th className='p-2 border'>9-10</th>
+            <th className='p-2 border'>10-11</th>
+            <th className='p-2 border'>11-12</th>
+            <th className='p-2 border'>12-1</th>
+            <th className='p-2 border'>1-2</th>
+            {/* <th className='p-2 border'>2-3</th> */}
+            {/* Add more time slots as needed */}
+          </tr>
+        </thead>
+        <tbody>
+          {timetable.entries.map((dayEntry) => (
+            <tr
+              key={dayEntry._id}
+              className='border'
+            >
+              <td className='p-2'>
+                <strong> {days[dayEntry.day]}</strong>
+              </td>
+              {renderEntries(dayEntry.entry)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )
+  }
   // console.log(departments)
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
@@ -38,8 +82,8 @@ const Body = () => {
     dispatch(getTimeTable(value))
   }
 
-  const timetable = useSelector((state) => state.admin.timeTables.result)
-  // console.log(timetable)
+  const timetable = useSelector((state) => state.admin.timeTables)
+  console.log(timetable)
   // console.log(timetable)
 
   useEffect(() => {
@@ -130,8 +174,17 @@ const Body = () => {
               !loading &&
               Object.keys(error).length === 0 &&
               timetable?.length !== 0 && (
-                <div className={classes.adminData}>
-                  {/* Render your timetable here based on the 'timetable' state */}
+                <div className='mt-6'>
+                  <div className='p-6 bg-white rounded-lg shadow-md'>
+                    <h2 className='mb-2 text-2xl font-bold'>
+                      Timetable for Year {timetable.year}
+                    </h2>
+                    <h3 className='mb-4 text-lg font-semibold'>
+                      Department: {timetable.department}
+                    </h3>
+                    {/* Render the timetable */}
+                    {renderTimetable()}
+                  </div>
                 </div>
               )}
           </div>

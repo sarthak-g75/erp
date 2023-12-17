@@ -298,10 +298,12 @@ export const deleteTimeTable = async (req, res) => {
 
 // get Time Table
 export const getTimeTable = async (req, res) => {
-  const { department, year } = req.body
+  const { department, year } = req.query
+  console.log(department, year)
   // console.log(department, year)
   try {
     const timetable = await TimeTable.findOne({ department, year })
+    // console.log(timetable)
 
     if (!timetable) {
       return res.status(404).json({ message: 'Timetable not found' })
