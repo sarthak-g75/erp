@@ -210,13 +210,16 @@ export const addAdmin = async (req, res) => {
 }
 
 // create TimeTable
+// create TimeTable
+// create TimeTable
 export const createTimeTable = async (req, res) => {
   try {
-    const { department, year } = req.body
+    const { department, year, section } = req.body
     const errors = { timeTableError: String }
     const existingTimeTable = await TimeTable.findOne({
       department,
       year,
+      section,
     })
     const subjects = await Subject.find({ department, year })
 
@@ -228,20 +231,27 @@ export const createTimeTable = async (req, res) => {
     const timeSlot = ['9-10', '10-11', '11-12', '12-1', '1-2', '2-3', '3-4']
     const days = [0, 1, 2, 3, 4]
 
+    // Get existing timetables for the same year and department (excluding the current section)
+    const existingTimetables = await TimeTable.find({
+      department,
+      year,
+      section: { $ne: section },
+    })
+
     const newTimeTable = new TimeTable({
       year,
       department,
+      section,
       entries: [],
     })
 
     for (let i = 0; i < days.length; i++) {
-      const tempSubjects = [...subjects] // Create a copy of subjects array
+      const tempSubjects = [...subjects]
 
       const dayEntries = []
 
       for (let j = 0; j < timeSlot.length; j++) {
         if (tempSubjects.length === 0) {
-          // If all subjects are used for the day, break the inner loop
           break
         }
 
@@ -249,13 +259,31 @@ export const createTimeTable = async (req, res) => {
         const randomIndex = Math.floor(Math.random() * tempSubjects.length)
         const randomSubject = tempSubjects.splice(randomIndex, 1)[0]
 
-        // Create an entry for the day
-        const entry = {
-          timeSlot: timeSlot[j],
-          subject: randomSubject.subjectName, // Assuming each subject has a name property
-        }
+        // Check if the subject is used in the same time slot for any existing timetable
+        const isSubjectUsed = existingTimetables.some((timetable) =>
+          timetable.entries.some(
+            (dayEntry) =>
+              dayEntry.day === days[i] &&
+              dayEntry.entry.some(
+                (entry) =>
+                  entry.timeSlot === timeSlot[j] &&
+                  entry.subject === randomSubject.subjectName
+              )
+          )
+        )
 
-        dayEntries.push(entry)
+        if (isSubjectUsed) {
+          // If the subject is already used in the same time slot for another section, choose another subject
+          j-- // Try again for the same time slot
+        } else {
+          // Create an entry for the day
+          const entry = {
+            timeSlot: timeSlot[j],
+            subject: randomSubject.subjectName,
+          }
+
+          dayEntries.push(entry)
+        }
       }
 
       // Add dayEntries to the new timetable
@@ -267,11 +295,11 @@ export const createTimeTable = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Notice created successfully',
+      message: 'Timetable created successfully',
       response: newTimeTable,
     })
   } catch (error) {
-    res.send({ status: 400, success: false, msg: error.message })
+    res.status(400).json({ success: false, msg: error.message })
   }
 }
 
@@ -298,11 +326,11 @@ export const deleteTimeTable = async (req, res) => {
 
 // get Time Table
 export const getTimeTable = async (req, res) => {
-  const { department, year } = req.query
+  const { department, year, section } = req.query
   console.log(department, year)
   // console.log(department, year)
   try {
-    const timetable = await TimeTable.findOne({ department, year })
+    const timetable = await TimeTable.findOne({ department, year, section })
     // console.log(timetable)
 
     if (!timetable) {
@@ -542,7 +570,7 @@ export const getSubject = async (req, res) => {
   try {
     const { department, year } = req.body
 
-    if (!req.userId) return res.json({ message: 'Unauthenticated' })
+    // if (!req.userId) return res.json({ message: 'Unauthenticated' })
     const errors = { noSubjectError: String }
 
     const subjects = await Subject.find({ department, year })

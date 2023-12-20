@@ -216,6 +216,7 @@ export const addSubject = (formData) => async (dispatch) => {
 export const getSubject = (formData) => async (dispatch) => {
   try {
     const { data } = await api.getSubject(formData)
+    console.log(data)
     dispatch({ type: GET_SUBJECT, payload: data })
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data })
@@ -271,7 +272,7 @@ export const getNotice = (formData) => async (dispatch) => {
 export const createTimeTable = (formData) => async (dispatch) => {
   try {
     const { data } = await api.createTimeTable(formData)
-    alert('Notice Created Successfully')
+    alert('Time Table Created Successfully')
     dispatch({ type: CREATE_TIME_TABLE, payload: true })
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data })
@@ -282,8 +283,8 @@ export const getTimeTable = (formData) => async (dispatch) => {
   // console.log(formData)
 
   try {
-    const { department, year } = formData
-    const data = await api.getTimeTable({ department, year })
+    const { department, year, section } = formData
+    const data = await api.getTimeTable({ department, year, section })
     // console.log(data.data.result)
     dispatch({ type: GET_TIME_TABLE, payload: data.data.result })
   } catch (error) {

@@ -19,6 +19,7 @@ const Body = () => {
   const [value, setValue] = useState({
     department: '',
     year: 1,
+    section: 1,
     // ... Your other form input fields
   })
 
@@ -98,6 +99,20 @@ const Body = () => {
                     value={value.year}
                     onChange={(e) =>
                       setValue({ ...value, year: e.target.value })
+                    }
+                  >
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                  </Select>
+                </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Section :</h1>
+                  <Select
+                    required
+                    value={value.section}
+                    onChange={(e) =>
+                      setValue({ ...value, section: e.target.value })
                     }
                   >
                     <MenuItem value={1}>1</MenuItem>

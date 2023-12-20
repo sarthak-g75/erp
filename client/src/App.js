@@ -47,6 +47,8 @@ import CreateNotice from './components/admin/createNotice/CreateNotice'
 
 import Navbar from './utils/Navbar'
 import GetTimeTable from './components/admin/getTimeTable/GetTimeTable'
+import FacultyGetTimeTable from './components/faculty/getTimeTable/FacultyGetTimeTable'
+import ViewTimeTable from './components/student/viewTimeTable/ViewTimeTable'
 
 const App = () => {
   return (
@@ -194,7 +196,16 @@ const App = () => {
           element={<MarkAttendance />}
         />
 
+        <Route
+          path='/faculty/gettimetable'
+          element={<FacultyGetTimeTable />}
+        />
         {/* Student  */}
+
+        <Route
+          path='/student/viewtimetable'
+          element={<ViewTimeTable />}
+        />
 
         <Route
           path='/login/studentlogin'

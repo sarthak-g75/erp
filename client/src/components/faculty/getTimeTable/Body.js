@@ -84,7 +84,7 @@ const Body = () => {
   }
 
   const timetable = useSelector((state) => state.admin.timeTables)
-  console.log(timetable)
+  // console.log(timetable)
   // console.log(timetable)
 
   useEffect(() => {

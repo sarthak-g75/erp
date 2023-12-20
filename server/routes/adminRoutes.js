@@ -37,6 +37,7 @@ import {
   getAllTimeTable,
   addAllStudents,
 } from '../controller/adminController.js'
+import auth from '../middleware/auth.js'
 const router = express.Router()
 
 router.use(bodyParser.urlencoded({ extended: true }))

@@ -1,14 +1,23 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { getAllDepartment } from '../../../redux/actions/adminActions'
+import { getTimeTable } from '../../../redux/actions/adminActions'
+
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import Body from './Body'
+// import { getTimeTable } from '../../../../../server/controller/adminController'
 
-const CreateTimeTable = () => {
+const ViewTimeTable = () => {
+  const user = JSON.parse(localStorage.getItem('user'))
+  const value = {
+    department: user.result.department,
+    year: user.result.year,
+    section: user.result.section,
+  }
+
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getAllDepartment())
+    dispatch(getTimeTable(value))
   }, [dispatch])
 
   return (
@@ -24,4 +33,4 @@ const CreateTimeTable = () => {
   )
 }
 
-export default CreateTimeTable
+export default ViewTimeTable

@@ -57,8 +57,10 @@ const Body = () => {
     setError({})
     dispatch(getStudent(value))
     dispatch(getSubject({ department: value.department, year: value.year }))
+    console.log(value)
   }
   const students = useSelector((state) => state.admin.students.result)
+  // console.log(subjects)
 
   const uploadAttendance = (e) => {
     setError({})
